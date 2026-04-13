@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'aulas/trabalho3_calculadora.dart';
+import 'aulas/trabalho4_todo_tela.dart';
 import 'models/filme_item.dart';
 import 'models/tema_item.dart';
 import 'widgets/filmes_listview.dart';
@@ -62,7 +65,7 @@ final List<TemaItem> temas = <TemaItem>[
 ];
 
 void main() {
-  runApp(const MainApp());
+  runApp(const ProviderScope(child: MainApp()));
 }
 
 class MainApp extends StatelessWidget {
@@ -72,12 +75,66 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Aula - Movie App (ListView e GridView)',
+      title: 'Aulas Flutter',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1F6FEB)),
         useMaterial3: true,
       ),
-      home: const TelaPrincipalMovieApp(),
+      home: const TelaAtividades(),
+    );
+  }
+}
+
+class TelaAtividades extends StatelessWidget {
+  const TelaAtividades({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Atividades Avaliativas'),
+        centerTitle: true,
+      ),
+      body: ListView(
+        children: [
+          ListTile(
+            title: const Text('Trabalho 3 - Calculadora'),
+            subtitle: const Text('Componentizacao de widgets'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => const Trabalho3CalculadoraPage(),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text('Trabalho 4 - To-Do List'),
+            subtitle: const Text('Riverpod + ListView.builder'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => const Trabalho4TodoPage(),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text('Movie App (aula)'),
+            subtitle: const Text('ListView + GridView'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => const TelaPrincipalMovieApp(),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }

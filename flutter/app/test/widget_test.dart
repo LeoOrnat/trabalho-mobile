@@ -6,14 +6,16 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:example_application/main.dart';
 
 void main() {
-  testWidgets('Renderiza formulario inicial', (WidgetTester tester) async {
-    await tester.pumpWidget(const AulaFormularioApp());
+  testWidgets('Renderiza menu de atividades', (WidgetTester tester) async {
+    await tester.pumpWidget(const ProviderScope(child: MainApp()));
 
-    expect(find.text('Formulario com Validacao'), findsOneWidget);
-    expect(find.text('Registrar dados'), findsOneWidget);
+    expect(find.text('Atividades Avaliativas'), findsOneWidget);
+    expect(find.text('Trabalho 3 - Calculadora'), findsOneWidget);
+    expect(find.text('Trabalho 4 - To-Do List'), findsOneWidget);
   });
 }

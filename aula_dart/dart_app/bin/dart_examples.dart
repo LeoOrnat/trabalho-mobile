@@ -401,7 +401,7 @@ void secao23UsoDeImport() {
 // SECAO: NULL SAFETY
 // ============================
 void secao24NullSafety() {
-  String observacao;
+  String? observacao;
   print('[24] Observacao inicial (nula): $observacao');
 
   observacao = 'Entrega prevista para amanha';

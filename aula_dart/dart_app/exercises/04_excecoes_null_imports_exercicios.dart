@@ -16,7 +16,12 @@ void main() {
   // ============================
   // SECAO: ORGANIZACAO DE CODIGO EM MULTIPLOS ARQUIVOS
   // ============================
-  LivroExercicio livro = LivroExercicio('POO para iniciantes', 'Professor A');
+  LivroExercicio livro = LivroExercicio(
+    id: '1',
+    titulo: 'POO para iniciantes',
+    autor: 'Professor A',
+    anoPublicacao: 2020,
+  );
   print('[22] Livro criado em outro arquivo: ${livro.titulo}');
 
   // ============================
@@ -24,7 +29,14 @@ void main() {
   // ============================
   BibliotecaExercicioService biblioteca = BibliotecaExercicioService();
   biblioteca.adicionarLivro(livro);
-  biblioteca.adicionarLivro(LivroExercicio('Dart no console', 'Professora B'));
+  biblioteca.adicionarLivro(
+    LivroExercicio(
+      id: '2',
+      titulo: 'Dart no console',
+      autor: 'Professora B',
+      anoPublicacao: 2023,
+    ),
+  );
   biblioteca.listarLivros();
 
   // ============================

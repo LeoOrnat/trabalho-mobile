@@ -13,6 +13,13 @@ flutter pub get
 flutter run
 ```
 
+## Trabalhos 3 e 4 (Atividades Avaliativas)
+
+Ao executar o app, a tela inicial apresenta um menu com:
+
+- Trabalho 3: Calculadora (componentizacao)
+- Trabalho 4: To-Do List (Riverpod + ListView.builder)
+
 ## Executar Testes
 
 ```bash
