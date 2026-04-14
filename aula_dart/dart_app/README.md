@@ -68,3 +68,4 @@ dart test
 - Os exercícios estão organizados por arquivo numerado na pasta `exercises/`.
 - As implementações de apoio usadas em aula estão em `lib/`.
 - Recomenda-se commitar a evolução por exercício para facilitar revisão.
+--
