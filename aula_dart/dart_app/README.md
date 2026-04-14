@@ -21,7 +21,7 @@ dart run bin/dart_examples.dart
 
 ## Trabalho 1 - Hello World
 
-- Nome do estudante: (preencher)
+- Nome do estudante: Rafael Domingues
 - Objetivo: executar um programa simples em Dart imprimindo "Hello World" no terminal.
 
 ### Executar
@@ -38,7 +38,7 @@ Hello World
 
 ## Trabalho 2 - CRUD de Biblioteca (Terminal)
 
-- Integrantes do grupo: (preencher)
+- Integrantes do grupo: Luiz Lealdino, Gustavo Monteiro, João Gustavo Rodrigues, Leonardo Ornat, Rafael Domingues
 - Objetivo: gerenciar livros no terminal usando POO (classes, atributos, metodos, construtores) e lista em memoria.
 
 ### Executar
