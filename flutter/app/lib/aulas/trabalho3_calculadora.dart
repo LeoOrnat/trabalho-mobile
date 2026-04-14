@@ -10,63 +10,62 @@ class Trabalho3CalculadoraPage extends StatefulWidget {
 
 class _Trabalho3CalculadoraPageState extends State<Trabalho3CalculadoraPage> {
   String _display = '0';
-  String? _operador;
+  String _expressao = '';
   double? _primeiroValor;
-  bool _limparDisplayNoProximoNumero = false;
+  String? _operador;
+  bool _limparNoProximoNumero = false;
 
   void _limpar() {
     setState(() {
       _display = '0';
-      _operador = null;
+      _expressao = '';
       _primeiroValor = null;
-      _limparDisplayNoProximoNumero = false;
+      _operador = null;
+      _limparNoProximoNumero = false;
     });
   }
 
   void _digitarNumero(String valor) {
     setState(() {
-      if (_limparDisplayNoProximoNumero) {
+      if (_limparNoProximoNumero) {
         _display = '0';
-        _limparDisplayNoProximoNumero = false;
+        _limparNoProximoNumero = false;
       }
 
       if (valor == '.') {
-        if (_display.contains('.')) {
-          return;
-        }
-        _display = '$_display.';
+        if (_display.contains('.')) return;
+        _display += '.';
         return;
       }
 
       if (_display == '0') {
         _display = valor;
-        return;
+      } else {
+        _display += valor;
       }
-
-      _display += valor;
     });
   }
 
   void _selecionarOperacao(String operador) {
-    final double? valorAtual = double.tryParse(_display);
-    if (valorAtual == null) {
-      return;
-    }
+    final valorAtual = double.tryParse(_display);
+    if (valorAtual == null) return;
 
     setState(() {
       _primeiroValor = valorAtual;
       _operador = operador;
-      _limparDisplayNoProximoNumero = true;
+      _expressao = '${_formatarResultado(valorAtual)} $operador';
+      _limparNoProximoNumero = true;
     });
   }
 
   void _calcular() {
-    final double? segundoValor = double.tryParse(_display);
+    final segundoValor = double.tryParse(_display);
+
     if (_primeiroValor == null || _operador == null || segundoValor == null) {
       return;
     }
 
-    final double resultado;
+    double resultado;
 
     switch (_operador) {
       case '+':
@@ -82,9 +81,10 @@ class _Trabalho3CalculadoraPageState extends State<Trabalho3CalculadoraPage> {
         if (segundoValor == 0) {
           setState(() {
             _display = 'Erro';
-            _operador = null;
+            _expressao = '';
             _primeiroValor = null;
-            _limparDisplayNoProximoNumero = true;
+            _operador = null;
+            _limparNoProximoNumero = true;
           });
           return;
         }
@@ -95,38 +95,47 @@ class _Trabalho3CalculadoraPageState extends State<Trabalho3CalculadoraPage> {
     }
 
     setState(() {
+      _expressao =
+          '${_formatarResultado(_primeiroValor!)} $_operador ${_formatarResultado(segundoValor)} =';
       _display = _formatarResultado(resultado);
       _primeiroValor = null;
       _operador = null;
-      _limparDisplayNoProximoNumero = true;
+      _limparNoProximoNumero = true;
     });
   }
 
   String _formatarResultado(double valor) {
-    if (valor.isInfinite || valor.isNaN) {
+    if (valor.isNaN || valor.isInfinite) {
       return 'Erro';
     }
 
-    final String raw = valor.toStringAsPrecision(12);
-    if (!raw.contains('.')) {
-      return raw;
+    if (valor == valor.toInt()) {
+      return valor.toInt().toString();
     }
 
-    final String semZeros = raw.replaceFirst(RegExp(r'\.?0+$'), '');
-    return semZeros;
+    return valor
+        .toStringAsFixed(2)
+        .replaceFirst(RegExp(r'0+$'), '')
+        .replaceFirst(RegExp(r'\.$'), '');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[100],
       appBar: AppBar(
         title: const Text('Trabalho 3 - Calculadora'),
         centerTitle: true,
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
       ),
       body: SafeArea(
         child: Column(
           children: [
-            CalculatorDisplay(texto: _display),
+            CalculatorDisplay(
+              expressao: _expressao,
+              texto: _display,
+            ),
             Expanded(
               child: CalculatorKeypad(
                 onNumero: _digitarNumero,
@@ -143,26 +152,45 @@ class _Trabalho3CalculadoraPageState extends State<Trabalho3CalculadoraPage> {
 }
 
 class CalculatorDisplay extends StatelessWidget {
+  final String expressao;
   final String texto;
 
-  const CalculatorDisplay({super.key, required this.texto});
+  const CalculatorDisplay({
+    super.key,
+    required this.expressao,
+    required this.texto,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
-      alignment: Alignment.centerRight,
-      color: Theme.of(context).colorScheme.surfaceContainerHighest,
-      child: FittedBox(
-        fit: BoxFit.scaleDown,
-        alignment: Alignment.centerRight,
-        child: Text(
-          texto,
-          style: const TextStyle(
-            fontSize: 48,
-            fontWeight: FontWeight.w600,
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+      color: Colors.grey[200], // 👈 fundo claro (sem preto)
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(
+            expressao,
+            style: const TextStyle(
+              fontSize: 22,
+              color: Colors.black54, // 👈 corrigido
+            ),
           ),
-        ),
+          const SizedBox(height: 10),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerRight,
+            child: Text(
+              texto,
+              style: const TextStyle(
+                fontSize: 48,
+                fontWeight: FontWeight.bold,
+                color: Colors.black, // 👈 corrigido
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -184,96 +212,91 @@ class CalculatorKeypad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _row(
-          [
-            CalculatorButton(
-              label: 'C',
-              backgroundColor: Theme.of(context).colorScheme.errorContainer,
-              onPressed: onLimpar,
-            ),
-            CalculatorButton(
-              label: '÷',
-              backgroundColor:
-                  Theme.of(context).colorScheme.secondaryContainer,
-              onPressed: () => onOperacao('÷'),
-            ),
-            CalculatorButton(
-              label: '×',
-              backgroundColor:
-                  Theme.of(context).colorScheme.secondaryContainer,
-              onPressed: () => onOperacao('×'),
-            ),
-            CalculatorButton(
-              label: '-',
-              backgroundColor:
-                  Theme.of(context).colorScheme.secondaryContainer,
-              onPressed: () => onOperacao('-'),
-            ),
-          ],
-        ),
-        _row(
-          [
-            CalculatorButton(label: '7', onPressed: () => onNumero('7')),
-            CalculatorButton(label: '8', onPressed: () => onNumero('8')),
-            CalculatorButton(label: '9', onPressed: () => onNumero('9')),
-            CalculatorButton(
-              label: '+',
-              backgroundColor:
-                  Theme.of(context).colorScheme.secondaryContainer,
-              onPressed: () => onOperacao('+'),
-            ),
-          ],
-        ),
-        _row(
-          [
-            CalculatorButton(label: '4', onPressed: () => onNumero('4')),
-            CalculatorButton(label: '5', onPressed: () => onNumero('5')),
-            CalculatorButton(label: '6', onPressed: () => onNumero('6')),
-            CalculatorButton(
-              label: '=',
-              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-              onPressed: onIgual,
-            ),
-          ],
-        ),
-        Expanded(
-          child: _row(
-            [
-              CalculatorButton(
-                label: '1',
-                onPressed: () => onNumero('1'),
-              ),
-              CalculatorButton(
-                label: '2',
-                onPressed: () => onNumero('2'),
-              ),
-              CalculatorButton(
-                label: '3',
-                onPressed: () => onNumero('3'),
-              ),
-              CalculatorButton(
-                label: '0',
-                flex: 2,
-                onPressed: () => onNumero('0'),
-              ),
-              CalculatorButton(
-                label: '.',
-                onPressed: () => onNumero('.'),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _row(List<CalculatorButton> buttons) {
-    return Expanded(
-      child: Row(
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Column(
         children: [
-          for (final button in buttons) Expanded(flex: button.flex, child: button),
+          Expanded(
+            child: Row(
+              children: [
+                CalculatorButton(
+                  label: 'C',
+                  backgroundColor: Colors.red,
+                  textColor: Colors.white,
+                  onPressed: onLimpar,
+                ),
+                CalculatorButton(
+                  label: '÷',
+                  backgroundColor: Colors.orange,
+                  textColor: Colors.white,
+                  onPressed: () => onOperacao('÷'),
+                ),
+                CalculatorButton(
+                  label: '×',
+                  backgroundColor: Colors.orange,
+                  textColor: Colors.white,
+                  onPressed: () => onOperacao('×'),
+                ),
+                CalculatorButton(
+                  label: '-',
+                  backgroundColor: Colors.orange,
+                  textColor: Colors.white,
+                  onPressed: () => onOperacao('-'),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Row(
+              children: [
+                CalculatorButton(label: '7', onPressed: () => onNumero('7')),
+                CalculatorButton(label: '8', onPressed: () => onNumero('8')),
+                CalculatorButton(label: '9', onPressed: () => onNumero('9')),
+                CalculatorButton(
+                  label: '+',
+                  backgroundColor: Colors.orange,
+                  textColor: Colors.white,
+                  onPressed: () => onOperacao('+'),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Row(
+              children: [
+                CalculatorButton(label: '4', onPressed: () => onNumero('4')),
+                CalculatorButton(label: '5', onPressed: () => onNumero('5')),
+                CalculatorButton(label: '6', onPressed: () => onNumero('6')),
+                CalculatorButton(
+                  label: '=',
+                  backgroundColor: Colors.blue,
+                  textColor: Colors.white,
+                  onPressed: onIgual,
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Row(
+              children: [
+                CalculatorButton(label: '1', onPressed: () => onNumero('1')),
+                CalculatorButton(label: '2', onPressed: () => onNumero('2')),
+                CalculatorButton(label: '3', onPressed: () => onNumero('3')),
+                CalculatorButton(label: '.', onPressed: () => onNumero('.')),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Row(
+              children: [
+                CalculatorButton(
+                  label: '0',
+                  flex: 4,
+                  onPressed: () => onNumero('0'),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -283,34 +306,45 @@ class CalculatorKeypad extends StatelessWidget {
 class CalculatorButton extends StatelessWidget {
   final String label;
   final VoidCallback onPressed;
-  final Color? backgroundColor;
+  final Color backgroundColor;
+  final Color textColor;
   final int flex;
 
   const CalculatorButton({
     super.key,
     required this.label,
     required this.onPressed,
-    this.backgroundColor,
+    this.backgroundColor = Colors.white,
+    this.textColor = Colors.black,
     this.flex = 1,
   });
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    final Color bg = backgroundColor ?? colorScheme.surface;
-
-    return Padding(
-      padding: const EdgeInsets.all(6),
-      child: FilledButton(
-        style: FilledButton.styleFrom(
-          backgroundColor: bg,
-          foregroundColor: colorScheme.onSurface,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        ),
-        onPressed: onPressed,
-        child: Text(
-          label,
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+    return Expanded(
+      flex: flex,
+      child: Padding(
+        padding: const EdgeInsets.all(6),
+        child: SizedBox(
+          height: double.infinity,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: backgroundColor,
+              foregroundColor: textColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
+              elevation: 2,
+            ),
+            onPressed: onPressed,
+            child: Text(
+              label,
+              style: const TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
         ),
       ),
     );
