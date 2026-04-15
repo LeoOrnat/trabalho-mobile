@@ -166,7 +166,7 @@ class CalculatorDisplay extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-      color: Colors.grey[200], // 👈 fundo claro (sem preto)
+      color: Colors.grey[200],
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
@@ -174,7 +174,7 @@ class CalculatorDisplay extends StatelessWidget {
             expressao,
             style: const TextStyle(
               fontSize: 22,
-              color: Colors.black54, // 👈 corrigido
+              color: Colors.black54,
             ),
           ),
           const SizedBox(height: 10),
@@ -186,7 +186,7 @@ class CalculatorDisplay extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 48,
                 fontWeight: FontWeight.bold,
-                color: Colors.black, // 👈 corrigido
+                color: Colors.black,
               ),
             ),
           ),
