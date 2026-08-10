@@ -149,12 +149,15 @@ Exemplo:
 
 Integrantes:
 
-João Silva - github.com/joaosilva
-Maria Souza - github.com/mariasouza
-Pedro Lima - github.com/pedrolima
+Rafael Domingues - [github.com/domingues497](https://github.com/domingues497)
+Leonardo Ornat - [github.com/LeoOrnat](https://github.com/LeoOrnat)
+Luiz Lealdino - [github.com/LuizLealdino-stack](https://github.com/LuizLealdino-stack)
+João Gustavo Rodrigues - [github.com/gutsfz](https://github.com/gutsfz)
+Rullian Peep19 - [github.com/rullianpeep19-dotcom](https://github.com/rullianpeep19-dotcom) 
+
 
 Repositório:
-https://github.com/grupo-exemplo/trabalho-mobile
+https://github.com/domingues497/trabalho-mobile
 
 **Cópia do e-mail (CC)**
 
@@ -194,11 +197,12 @@ Recomenda-se incluir no README do trabalho uma seção indicando a contribuiçã
 
 Contribuição dos integrantes:
 
-João - implementação do CRUD
-Maria - interface da calculadora
-Carlos - lógica das operações
-Ana - documentação
-Pedro - testes e ajustes
+Rafael Domingues - fez o atividade avaliativa 2 fazendo projeto.
+Leonardo Ornat - fez o atividade avaliativa 4 fazendo projeto.
+Luiz Lealdino - fez o atividade avaliativa 3 fazendo projeto.
+João Gustavo Rodrigues - fez o atividade avaliativa 4 fazendo projeto.
+Rullian Peep19 - fez o atividade avaliativa 4 fazendo projeto.
+
 
 ## Observações
 

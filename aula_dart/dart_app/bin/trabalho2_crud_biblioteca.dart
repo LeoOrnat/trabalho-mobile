@@ -118,12 +118,22 @@ void _atualizarLivro(BibliotecaExercicioService biblioteca) {
 void _removerLivro(BibliotecaExercicioService biblioteca) {
   final String id = _lerLinha('ID do livro para remover: ').trim();
 
-  final bool ok = biblioteca.removerLivro(id);
-  if (!ok) {
+  // Busca o livro antes de remover
+  final LivroExercicio? livro = biblioteca.buscarPorId(id);
+  if (livro == null) {
     print('Livro nao encontrado.');
     return;
   }
 
+  // Mostra o livro encontrado e pede confirmação
+  print('Livro encontrado: $livro');
+  final String confirmacao = _lerLinha('Confirmar remocao? (s/n): ').trim().toLowerCase();
+  if (confirmacao != 's') {
+    print('Remocao cancelada.');
+    return;
+  }
+
+  biblioteca.removerLivro(id);
   print('Livro removido com sucesso.');
 }
 

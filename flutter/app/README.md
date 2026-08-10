@@ -17,7 +17,7 @@ flutter run
 
 Ao executar o app, a tela inicial apresenta um menu com:
 
-- Trabalho 3: Calculadora (componentizacao)
+- Trabalho 3: Calculadora (componentizacao) (luiz)
 - Trabalho 4: To-Do List (Riverpod + ListView.builder)
 
 ## Executar Testes
